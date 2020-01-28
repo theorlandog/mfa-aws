@@ -54,7 +54,7 @@ setup_options = dict(
         'Programming Language :: Python :: 3.8',
     ],
     data_files=[
-      ("config", ["config/mfa-config"]),
+      ("mfa-aws/config", ["config/mfa-config"]),
     ]
 )
 
