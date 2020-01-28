@@ -14,7 +14,7 @@ import configparser
 #
 # Constants
 ###############################################################################
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 DEFAULT_MFA_CONFIG_FILE_DIR = "~/.aws/"
 DEFAULT_MFA_CONFIG_FILE_NAME = "mfa-config"
