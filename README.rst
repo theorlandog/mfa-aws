@@ -26,9 +26,8 @@ Example
 Before
 ~~~~~~
 
-**``~/.aws/credentials``**
+**[~/.aws/credentials]**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. code:: bash
 
    [default]
@@ -39,9 +38,8 @@ Before
    aws_access_key_id = ASIADSGFDDFG3897
    aws_secret_access_key = DFGKSJGSDKJGSDKJ4636//43643KJ353KJH/KFDFSDFS/DLKDKSFsd0D
 
-**``~/.aws/mfa-config``**
+**[~/.aws/mfa-config]**
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. code:: bash
 
    [profile default]
@@ -70,9 +68,8 @@ After
 
 .. _awscredentials-1:
 
-**``~/.aws/credentials``**
+**~/.aws/credentials**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 .. code:: bash
 
    [default]
