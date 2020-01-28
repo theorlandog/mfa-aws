@@ -1,3 +1,4 @@
+# ~/.aws/mfa-config
 [profile default]
 mfa_serial = arn:aws:iam::111111111111:mfa/username
 dest_profile = default-mfa
