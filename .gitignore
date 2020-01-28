@@ -8,4 +8,4 @@
 /*.egg-info
 
 # Setuptools build folder.
-/buid/*
+build/
