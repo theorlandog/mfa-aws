@@ -1,0 +1,9 @@
+[profile default]
+mfa_serial = arn:aws:iam::111111111111:mfa/username
+dest_profile = default-mfa
+source_profile = default
+
+[profile other-account]
+mfa_serial = arn:aws:iam::999999999999:mfa/username
+dest_profile = other-account-mfa
+source_profile = other-account-default
