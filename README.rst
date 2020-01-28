@@ -68,7 +68,7 @@ After
 
 .. _awscredentials-1:
 
-**~/.aws/credentials**
+**[~/.aws/credentials]**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code:: bash
 
