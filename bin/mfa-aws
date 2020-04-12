@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import base64, binascii
 import boto3
 from botocore.exceptions import ClientError
 import argparse
@@ -7,6 +8,7 @@ import sys
 import shlex
 import re
 import os
+import oathtool
 import signal
 import configparser
 
@@ -56,6 +58,15 @@ def validate_token_code(arg_string):
     if not re.match(r"\d{6}", arg_string):
         raise ValueError(
                 "token_code must be 6 digits: '{0}'.".format(arg_string))
+    return arg_string
+
+
+def validate_token_secret(arg_string):
+    try:
+        base64.b32decode(arg_string)
+    except binascii.Error as e:
+        raise ValueError(
+                f"mfa_secret is not a valid base32 string ({str(e)})")
     return arg_string
 
 
@@ -159,8 +170,12 @@ def get_credential_dict(source_profile, mfa_serial, region, token_code, mfa_dura
     return get_session_token_response.get('Credentials')
 
 
-def get_token_code_from_user(mfa_serial):
-    token_code = validate_token_code(input("token code for {0}: ".format(mfa_serial)))
+def get_token_code_from_user(mfa_profile):
+    if "mfa_secret" in mfa_profile.keys():
+        validate_token_secret(mfa_profile["mfa_secret"])
+        token_code = oathtool.generate_otp(mfa_profile["mfa_secret"])
+    else:
+        token_code = validate_token_code(input("token code for {0}: ".format(mfa_profile["mfa_serial"])))
     return token_code
 
 
@@ -173,16 +188,16 @@ def main():
     # Parse Args and read config
     options = parse_args()
     config = read_config(options.config_file)
-    token_code = get_token_code_from_user(config[options.profile]["mfa_serial"])
+    token_code = get_token_code_from_user(config[options.profile])
     credential_dict = get_credential_dict(source_profile=config[options.profile].get("source_profile", options.profile),
                               mfa_serial=config[options.profile]["mfa_serial"],
                               mfa_duration=config[options.profile].get("mfa_duration", DEFAULT_MFA_DURATION),
                               region=config[options.profile].get("region", None), token_code=token_code)
     update_config(dest_profile=config[options.profile]["dest_profile"],
                         credential_dict=credential_dict, aws_credentials_file=AWS_CREDENTIALS_FILE_PATH)
+    print("Updated "+config[options.profile]["dest_profile"])
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, signal_handler)
     main()
     sys.exit(0)
-

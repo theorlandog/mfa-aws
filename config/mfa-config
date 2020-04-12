@@ -8,3 +8,4 @@ source_profile = default
 mfa_serial = arn:aws:iam::999999999999:mfa/username
 dest_profile = other-account-mfa
 source_profile = other-account-default
+mfa_secret = 4HIANG4VIUY5SUVL22L2QDRX7Q7EQAUUKZC5QTWNHKSEQDEW2TOFZUMIQROTFPU3

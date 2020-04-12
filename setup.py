@@ -25,7 +25,8 @@ def find_version(*file_paths):
 
 install_requires = [
   'botocore',
-  'boto3'
+  'boto3',
+  'oathtool'
 ]
 
 

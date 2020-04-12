@@ -9,9 +9,9 @@ Usage
 .. code:: bash
 
    usage: mfa-aws [options]
-    
+
    updates aws credentials file with temporary sts credentials obtained with mfa
-    
+
    optional arguments:
      -h, --help            show this help message and exit
      -d, --debug           Enable debug
@@ -33,7 +33,7 @@ Before
    [default]
    aws_access_key_id = ASIADSJFKDSF3242
    aws_secret_access_key = FDSFSDKJFd/fdsfSDFSFfDSF4837fdDSFHDKSFsd0D
-    
+
    [other-account-default]
    aws_access_key_id = ASIADSGFDDFG3897
    aws_secret_access_key = DFGKSJGSDKJGSDKJ4636//43643KJ353KJH/KFDFSDFS/DLKDKSFsd0D
@@ -45,11 +45,12 @@ Before
    [profile default]
    mfa_serial = arn:aws:iam::111111111111:mfa/username
    dest_profile = default-mfa
-    
+
    [profile other-account]
    mfa_serial = arn:aws:iam::999999999999:mfa/username
    dest_profile = other-account-mfa
    source_profile = other-account-default
+   mfa_secret = 4HIANG4VIUY5SUVL22L2QDRX7Q7EQAUUKZC5QTWNHKSEQDEW2TOFZUMIQROTFPU3
 
 Run
 ~~~
@@ -58,9 +59,10 @@ Run
 
    MBP-USERNAME:~ username$ mfa-aws
    token code for arn:aws:iam::111111111111:mfa/username: 111111
+   Updated credentials for default-mfa
    MBP-USERNAME:~ username$
    MBP-USERNAME:~ username$ mfa-aws -p other-account
-   token code for arn:aws:iam::999999999999:mfa/username: 999999
+   Updated credentials for other-account-mfa
    MBP-USERNAME:~ username$
 
 After
@@ -75,16 +77,16 @@ After
    [default]
    aws_access_key_id = ASIADSJFKDSF3242
    aws_secret_access_key = FDSFSDKJFd/fdsfSDFSFfDSF4837fdDSFHDKSFsd0D
-    
+
    [other-account-default]
    aws_access_key_id = ASIADSGFDDFG3897
    aws_secret_access_key = DFGKSJGSDKJGSDKJ4636//43643KJ353KJH/KFDFSDFS/DLKDKSFsd0D
-    
+
    [default-mfa]
    aws_access_key_id = ASIADSJFKDSF3242
    aws_secret_access_key = FDSFSDKJFd/fdsfSDFSFfDSF4837fdDSFHDKSFsd0D
    aws_session_token = RIKJSFSAFJAS128753718965/352523//35jfhdssdDSJFKRIKJSFSAFJAS128753718965/352523//35jfhdssdDSJFKRIKJSFSAFJAS128753718965/352523//35jfhdssdDSJFK
-    
+
    [other-account-mfa]
    aws_access_key_id = ASIADSGFDDFG3897
    aws_secret_access_key = DFGKSJGSDKJGSDKJ4636//43643KJ353KJH/KFDFSDFS/DLKDKSFsd0D
