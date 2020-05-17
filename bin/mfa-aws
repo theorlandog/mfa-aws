@@ -15,7 +15,7 @@ from subprocess import Popen, PIPE
 #
 # Constants
 ###############################################################################
-__version__ = '0.0.7'
+__version__ = '0.0.8'
 
 DEFAULT_MFA_CONFIG_FILE_DIR = "~/.aws/"
 DEFAULT_MFA_CONFIG_FILE_NAME = "mfa-config"
