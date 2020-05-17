@@ -95,7 +95,7 @@ Integrations
 
 YubiKey
 ~~~~~~~
-The TOTP functionality of YubiKey tokens can be integrated on the cli through the ykman utility. Just specify the yubikey_credential_name in the mfa-config profile.
+The TOTP functionality of YubiKey tokens can be integrated on the cli through the ykman cli utility. Just specify the yubikey_credential_name in the mfa-config profile.
 
 .. code:: bash
 
