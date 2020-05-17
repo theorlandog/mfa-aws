@@ -9,6 +9,7 @@ import re
 import os
 import signal
 import configparser
+from subprocess import Popen, PIPE
 
 ###############################################################################
 #
@@ -22,6 +23,8 @@ DEFAULT_MFA_CONFIG_FILE_PATH = os.path.expanduser(os.path.join(DEFAULT_MFA_CONFI
                                 DEFAULT_MFA_CONFIG_FILE_NAME))
 DEFAULT_MFA_DURATION = 36000
 AWS_CREDENTIALS_FILE_PATH = os.path.expanduser("~/.aws/credentials")
+
+YKMAN_BINARY_NAME = "ykman"
 
 
 ################################################################################
@@ -159,6 +162,50 @@ def get_credential_dict(source_profile, mfa_serial, region, token_code, mfa_dura
     return get_session_token_response.get('Credentials')
 
 
+def run_command(cmd, env=os.environ, cmd_input=None, stdin=PIPE, stdout=PIPE):
+    command = Popen(cmd, env=env, stdin=stdin, stdout=stdout)
+    communicate_args = {}
+    if cmd_input is not None:
+        communicate_args['input'] = cmd_input.encode()
+    (std_out, std_err) = command.communicate(**communicate_args)
+    if std_err is not None:
+        raise Exception(std_err.decode("utf-8"))
+    return std_out.decode("utf-8")
+
+def is_ykman_installed():
+    # Checks if ykman program is in path
+    command = [YKMAN_BINARY_NAME]
+    try:
+        run_command(command)
+    except FileNotFoundError:
+        return False
+    return True
+
+
+def get_token_code(config):
+    # If yubikey_credential_name is defined get the token from a yubikey, otherwise ask the user
+    if config.get("yubikey_credential_name", False):
+        token_code = get_token_code_from_yubikey(yubikey_credential_name=config.get("yubikey_credential_name", False))
+    else:
+        token_code = get_token_code_from_user(mfa_serial=config["mfa_serial"])
+    return token_code
+    
+
+def get_token_code_from_yubikey(yubikey_credential_name):
+    # Requires ykman installed on system
+    # use the ykman utility to retrieve a token_code from a yubikey
+    # yubikey_credential_name is the of the form ISSUER:ACCOUNT_NAME ie. Github:theorlandog
+    # for a list of configured yubikey_credential_names run `ykman oath list`
+    if not is_ykman_installed():
+        raise Exception("{ykman_binary_name} not found in path".format(ykman_binary_name=YKMAN_BINARY_NAME))
+    command = [YKMAN_BINARY_NAME, "oath", "code", yubikey_credential_name]
+    result = run_command(command)
+    if result.startswith(yubikey_credential_name):
+        token_code = result.split()[1]
+        return token_code
+    else:
+        raise Exception("YubiKey credential named {yubikey_credential_name} not found.".format(yubikey_credential_name=yubikey_credential_name))
+
 def get_token_code_from_user(mfa_serial):
     token_code = validate_token_code(input("token code for {0}: ".format(mfa_serial)))
     return token_code
@@ -173,7 +220,7 @@ def main():
     # Parse Args and read config
     options = parse_args()
     config = read_config(options.config_file)
-    token_code = get_token_code_from_user(config[options.profile]["mfa_serial"])
+    token_code = get_token_code(config=config[options.profile])
     credential_dict = get_credential_dict(source_profile=config[options.profile].get("source_profile", options.profile),
                               mfa_serial=config[options.profile]["mfa_serial"],
                               mfa_duration=config[options.profile].get("mfa_duration", DEFAULT_MFA_DURATION),
