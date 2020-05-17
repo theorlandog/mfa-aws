@@ -98,16 +98,15 @@ YubiKey
 ~~~~~
 The TOTP functionality of YubiKey tokens can integrated on the cli through the ykman utility. Just specify the yubikey_credential_name in the mfa-config profile
 
-```
+.. code:: bash
 [profile yubikey-account]
 mfa_serial = arn:aws:iam::999999999999:mfa/jamie
 yubikey_credential_name = AWS:jamie@yubikey-account
 dest_profile = yubikey-account-mfa
 source_profile = yubikey-account-default
-```
+
 
 yubikey_credential_name is of the form Issuer:AccountName and can be viewed with the following ykman command
 
-```
+.. code:: bash
 ykman oath list
-```
