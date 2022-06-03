@@ -198,7 +198,7 @@ def get_token_code_from_yubikey(yubikey_credential_name):
     # for a list of configured yubikey_credential_names run `ykman oath list`
     if not is_ykman_installed():
         raise Exception("{ykman_binary_name} not found in path".format(ykman_binary_name=YKMAN_BINARY_NAME))
-    command = [YKMAN_BINARY_NAME, "oath", "code", yubikey_credential_name]
+    command = [YKMAN_BINARY_NAME, "oath", "accounts", "code", yubikey_credential_name]
     result = run_command(command)
     if result.startswith(yubikey_credential_name):
         token_code = result.split()[1]
